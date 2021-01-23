@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./src/style.css" />
+    <title>오늘의공부</title>
+    <script src="https://cdn.anychart.com/js/8.0.1/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/js/8.0.1/anychart-pie.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="information-GPS">
+        <span class="place"></span><span class="weather"></span>
+      </div>
+      <div class="user-name">
+        <form class="user-name-form">
+          <input
+            class="user-name-input"
+            type="text"
+            placeholder="공부하는 당신은 누구?"
+            maxlength="10"
+          />
+        </form>
+        의 오늘의 공부
+      </div>
+      <div class="curr-time">00:00:00</div>
+    </header>
+
+    <div class="container">
+      <div class="sidebar">
+        <div id="todayRecord"></div>
+      </div>
+      <div class="content">
+        <ul class="todo">
+          <h3>오늘 할 일</h3>
+          <form>
+            <input type="text" placeholder="오늘 할 공부를 입력하세요" />
+          </form>
+          <li class="todo-list">
+            <button class="play"></button>
+            <div class="action"></div>
+            <div class="timer"></div>
+            <button class="del-btn"></button>
+            <button class="move-btn"></button>
+          </li>
+        </ul>
+        <ul class="done">
+          <h3>오늘 한 일</h3>
+          <li class="done-list">
+            <button class="good"></button>
+            <div class="action"></div>
+            <div class="timer"></div>
+            <button class="del-btn"></button>
+            <button class="move-btn"></button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script src="./src/greet.js"></script>
+    <script src="./src/todo.js"></script>
+    <script src="./src/clock.js"></script>
+    <script src="./src/weather.js"></script>
+  </body>
+</html>
