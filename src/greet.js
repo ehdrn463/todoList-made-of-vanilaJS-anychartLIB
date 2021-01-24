@@ -23,7 +23,7 @@ const loadName = function () {
 
   if (currUserName) {
     userNameForm.classList.add(DISPLAY_UN);
-    userName.innerHTML = currUserName;
+    userName.innerHTML = currUserName + "의 오늘의 공부";
   } else {
     userNameForm.classList.remove(DISPLAY_UN);
   }

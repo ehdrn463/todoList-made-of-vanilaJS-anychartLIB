@@ -1,15 +1,12 @@
-/* 필요한 기능
-0120: 스톱워치 (공부시간 체크) - setInertval clearInterval 조사
-0121: 스톱워치 (휴식시간 체크)
-*/
-
 const todo = document.querySelector(".todo"),
-  todoList = todo.querySelector("todo-list"),
+  todoList = document.querySelectorAll(".todo-list"),
   todoInput = todo.querySelector("input"),
   todoForm = todo.querySelector("form"),
   done = document.querySelector(".done"),
   doneList = done.querySelector("done-list"),
-  playBtn = document.querySelector("content .play");
+  playBtn = document.querySelector("content .play"),
+  playBtnAll = document.querySelectorAll("button.play"),
+  todayTime = document.querySelector(".today-time");
 
 const TODO_LIST = "todo",
   DONE_LIST = "done";
@@ -17,20 +14,15 @@ const TODO_LIST = "todo",
 let todos = [];
 let dones = [];
 
-const calcTime = function (start, position) {
-  let nowTime = String(Date.now());
-  let distance = nowTime - start;
-  // 시간 = (60 * 60 * 24 * 1000)
-  let hour = Math.floor((distance % (60 * 60 * 1000 * 24)) / (1000 * 60 * 60));
-  let min = Math.floor((distance % (60 * 60 * 1000)) / (1000 * 60));
-  let sec = Math.floor((distance % (1000 * 60)) / 1000);
-  let remainder = `${hour < 10 ? "0" + hour : hour}:${
+const milSecToStrTime = function (milSec) {
+  let hour = Math.floor((milSec / (1000 * 60 * 6)) % 24);
+  let min = Math.floor((milSec / (1000 * 60)) % 60);
+  let sec = Math.floor((milSec / 1000) % 60);
+
+  let strTime = `${hour < 10 ? "0" + hour : hour}:${
     min < 10 ? "0" + min : min
   }:${sec < 10 ? "0" + sec : sec}`;
-  // console.log(position, remainder);
-  // console.log(position);
-  position.innerText = remainder;
-  return remainder;
+  return strTime;
 };
 
 const recordTime = function (e) {
@@ -39,16 +31,26 @@ const recordTime = function (e) {
   let timeEl = e.target.parentNode.querySelector(".timer");
   let liId = e.target.parentNode.id;
   let changeObjIdx = todos.findIndex((todo) => todo.id == liId);
-  let changeObj = todos.filter((todo) => todo.id == liId)[0];
-  let clickTime = String(Date.now());
-  // 재생눌렀을때
-  // 타이머가 업데이트되어야 함
+
+  let totalMil = 0;
+  dones.forEach((done) => {
+    totalMil += done.ongoingTime;
+  });
+  todos.forEach((todo) => {
+    totalMil += todo.ongoingTime;
+  });
+
+  // 재생눌렀을때 타이머가 업데이트되어야 함
   if (!todos[changeObjIdx].ongoing) {
     todos[changeObjIdx].ongoing = true;
     e.target.innerText = "⏸";
     stopWatch = setInterval(function () {
-      let ongoingTime = calcTime(clickTime, timeEl);
-      todos[changeObjIdx].ongoingTime += ongoingTime;
+      todos[changeObjIdx].ongoingTime += 1000;
+      totalMil += 1000;
+      let strTime = milSecToStrTime(todos[changeObjIdx].ongoingTime);
+      timeEl.innerText = strTime;
+      todayTime.textContent =
+        todos && dones ? milSecToStrTime(totalMil) : "00:00:00";
       localStorage.setItem(TODO_LIST, JSON.stringify(todos));
     }, 1000);
   } else {
@@ -67,7 +69,7 @@ const createTodo = function () {
     id,
     text,
     ongoing: false,
-    ongoingTime: "00:00:00",
+    ongoingTime: 0,
   };
   todos.push(newTodo);
   localStorage.setItem(TODO_LIST, JSON.stringify(todos));
@@ -114,7 +116,7 @@ const addTodoUI = function (todoObj) {
   actionText.className = "action";
   actionText.innerText = `${todoObj.text}`;
   timerText.className = "timer";
-  timerText.innerText = `${todoObj.ongoingTime}`;
+  timerText.innerText = `${milSecToStrTime(todoObj.ongoingTime)}`;
   delBtn.className = "del-btn";
   delBtn.innerText = "❌";
   delBtn.addEventListener("click", deleteTodo);
@@ -144,7 +146,7 @@ const addDoneUI = function (todoObj) {
   actionText.className = "action";
   actionText.innerText = `${todoObj.text}`;
   timerText.className = "timer";
-  timerText.innerText = `${todoObj.ongoingTime}`;
+  timerText.innerText = `${milSecToStrTime(todoObj.ongoingTime)}`;
   delBtn.className = "del-btn";
   delBtn.innerText = "❌";
   delBtn.addEventListener("click", deleteTodo);
@@ -196,17 +198,17 @@ const handleMove = function (e) {
   localStorage.setItem(DONE_LIST, JSON.stringify(dones));
 };
 
-const progressCal = function () {
+const drawingChart = function () {
   todos = JSON.parse(localStorage.getItem(TODO_LIST)) || [];
   dones = JSON.parse(localStorage.getItem(DONE_LIST)) || [];
 
   todos.forEach((todo) => {
     todo.x = todo.text;
-    todo.value += strTosec(todo.ongoingTime);
+    todo.value = todo.ongoingTime / 1000;
   });
   dones.forEach((done) => {
     done.x = done.text;
-    done.value += strTosec(done.ongoingTime);
+    done.value = done.ongoingTime / 1000;
   });
 
   anychart.onDocumentReady(function () {
@@ -216,21 +218,17 @@ const progressCal = function () {
     chart.data(data2);
     chart.container("todayRecord");
     chart.draw();
+    chart.background().fill("rgba(255, 255, 255, 0.025");
   });
   localStorage.setItem(TODO_LIST, JSON.stringify(todos));
   localStorage.setItem(DONE_LIST, JSON.stringify(dones));
 };
 
-const strTosec = function (strTime) {
-  // '00:00:00'
-  const divTime = strTime.split(":");
-  let hour = parseInt(divTime[0]);
-  let min = parseInt(divTime[1]);
-  let sec = parseInt(divTime[2]);
-  let totalSec = sec + min * 60 + hour * 3600;
-  return totalSec;
-};
-
 loadTodo();
+drawingChart();
 todoForm.addEventListener("submit", handleSubmit);
-progressCal();
+
+playBtnAll.forEach((play) => {
+  play.addEventListener("click", drawingChart);
+});
+// setInterval(accTime, 1000);

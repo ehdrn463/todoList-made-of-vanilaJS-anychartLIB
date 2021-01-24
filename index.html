@@ -24,18 +24,19 @@
         </form>
         의 오늘의 공부
       </div>
-      <div class="curr-time">00:00:00</div>
     </header>
 
     <div class="container">
       <div class="sidebar">
+        <div class="curr-time">00:00:00</div>
         <div id="todayRecord"></div>
       </div>
       <div class="content">
+        <div class="today-time">00:00:00</div>
         <ul class="todo">
-          <h3>오늘 할 일</h3>
+          <h2>오늘 할 일</h2>
           <form>
-            <input type="text" placeholder="오늘 할 공부를 입력하세요" />
+            <input type="text" placeholder="Add a task" maxlength="15" />
           </form>
           <li class="todo-list">
             <button class="play"></button>
@@ -46,7 +47,7 @@
           </li>
         </ul>
         <ul class="done">
-          <h3>오늘 한 일</h3>
+          <h2>오늘 한 일</h2>
           <li class="done-list">
             <button class="good"></button>
             <div class="action"></div>
@@ -61,5 +62,6 @@
     <script src="./src/todo.js"></script>
     <script src="./src/clock.js"></script>
     <script src="./src/weather.js"></script>
+    <script src="./src/backgound.js"></script>
   </body>
 </html>

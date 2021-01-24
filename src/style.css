@@ -2,8 +2,6 @@
   background: url("./imgs/zoom.jpeg");
 } */
 
-html,
-body,
 #todayRecord {
   width: 100%;
   height: 100%;
@@ -11,25 +9,49 @@ body,
   padding: 0;
 }
 
-.curr-time {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+.play {
+  font-size: 15px;
+}
+
+.todo input {
+  width: 16.5vw;
+  height: 2vw;
+  font-size: 1.8vw;
+  text-align: center;
+}
+
+.del-btn {
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+.move-btn {
+  margin-right: 10px;
+  font-size: 15px;
+}
+
+.bgImage {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
   margin-right: 50px;
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 .content {
   display: flex;
   flex-direction: column;
-}
-
-.done {
-  background-color: antiquewhite;
+  background-color: rgba(255, 255, 255, 0.4);
+  width: 24.5vw;
+  height: max-content;
 }
 
 .container {
@@ -46,17 +68,40 @@ header {
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
+  color: white;
 }
 
-header {
-  display: block;
-}
-
-.user-name,
-.information-GPS {
+.user-name {
+  font-size: 4em;
   display: flex;
   flex-flow: row;
   justify-content: center;
+}
+.information-GPS {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  margin-right: 30%;
+}
+
+.curr-time {
+  font-size: 40px;
+  /* display: flex;
+  flex-flow: row;
+  justify-content: center; */
+  text-align: center;
+}
+
+.today-time {
+  font-size: 5em;
+  text-align: center;
+}
+
+.curr-time,
+.today-time {
+  display: flex;
+  flex-flow: row;
+  flex-direction: column;
 }
 
 .user-name-form {
@@ -67,23 +112,18 @@ header {
   display: none;
 }
 
-.todo {
-  background-color: antiquewhite;
-}
-
 .done .done-list,
 .todo .todo-list {
+  font-size: 25px;
   display: flex;
 }
 
-/* .todo :nth-child(3) {
-  display: none;
+.information-GPS {
+  margin-top: 50px;
+  font-size: 25px;
 }
-.done :nth-child(2) {
-  display: none;
-} */
 
 .done .done-list .action,
 .todo .todo-list .action {
-  width: 120px;
+  width: 10vw;
 }

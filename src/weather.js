@@ -12,11 +12,10 @@ const getWeather = function (lat, lng) {
       return res.json();
     })
     .then((json) => {
-      console.log(json);
       const weather = json.weather[0].main;
       const place = json.name;
-      weatherEl.textContent = `${weather}`;
-      placeEl.textContent = `In ${place}  `;
+      placeEl.textContent = `In ${place}` + ",";
+      weatherEl.innerText = "\xa0" + `${weather}`;
     });
 };
 
