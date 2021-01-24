@@ -43,7 +43,7 @@ const recordTime = function (e) {
   // 재생눌렀을때 타이머가 업데이트되어야 함
   if (!todos[changeObjIdx].ongoing) {
     todos[changeObjIdx].ongoing = true;
-    e.target.innerText = "⏸";
+    e.target.innerHTML = "⏸";
     stopWatch = setInterval(function () {
       todos[changeObjIdx].ongoingTime += 1000;
       totalMil += 1000;
@@ -95,9 +95,17 @@ const deleteTodo = function (e) {
 const loadTodo = function () {
   todos = JSON.parse(localStorage.getItem(TODO_LIST)) || [];
   dones = JSON.parse(localStorage.getItem(DONE_LIST)) || [];
-
-  todos.forEach((todo) => addTodoUI(todo));
-  dones.forEach((done) => addDoneUI(done));
+  let totalMil = 0;
+  todos.forEach((todo) => {
+    totalMil += todo.ongoingTime;
+    addTodoUI(todo);
+  });
+  dones.forEach((done) => {
+    totalMil += done.ongoingTime;
+    addDoneUI(done);
+  });
+  todayTime.textContent =
+    todos && dones ? milSecToStrTime(totalMil) : "00:00:00";
 };
 
 const addTodoUI = function (todoObj) {

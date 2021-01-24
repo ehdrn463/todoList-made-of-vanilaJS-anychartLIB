@@ -13,11 +13,21 @@
   font-size: 15px;
 }
 
+.user-name-form input {
+  width: 15vw;
+  height: 4vw;
+  font-size: 2vw;
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0);
+}
+
 .todo input {
   width: 16.5vw;
   height: 2vw;
   font-size: 1.8vw;
   text-align: center;
+  margin-bottom: 10px;
 }
 
 .del-btn {
@@ -76,7 +86,9 @@ header {
   display: flex;
   flex-flow: row;
   justify-content: center;
+  margin-right: 15px;
 }
+
 .information-GPS {
   display: flex;
   flex-flow: row;
@@ -105,7 +117,9 @@ header {
 }
 
 .user-name-form {
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
 
 .user-name-form .hiding {
@@ -126,4 +140,9 @@ header {
 .done .done-list .action,
 .todo .todo-list .action {
   width: 10vw;
+}
+
+.todo-list:first-of-type,
+.done-list:first-of-type {
+  display: none;
 }
