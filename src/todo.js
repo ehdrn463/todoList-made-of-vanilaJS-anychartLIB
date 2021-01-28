@@ -14,7 +14,7 @@ const TODO_LIST = "todo",
 let todos = [];
 let dones = [];
 
-const milSecToStrTime = function (milSec) {
+const milSecToStrTime = (milSec) => {
   let hour = Math.floor((milSec / (1000 * 60 * 6)) % 24);
   let min = Math.floor((milSec / (1000 * 60)) % 60);
   let sec = Math.floor((milSec / 1000) % 60);
@@ -25,9 +25,20 @@ const milSecToStrTime = function (milSec) {
   return strTime;
 };
 
-const recordTime = function (e) {
+const loadList = () => {
   todos = JSON.parse(localStorage.getItem(TODO_LIST)) || [];
   dones = JSON.parse(localStorage.getItem(DONE_LIST)) || [];
+};
+
+const saveList = (listName) => {
+  listName === TODO_LIST
+    ? localStorage.setItem(TODO_LIST, JSON.stringify(todos))
+    : localStorage.setItem(DONE_LIST, JSON.stringify(dones));
+};
+
+const recordTime = (e) => {
+  localStorage.setItem(TODO_LIST, JSON.stringify(todos));
+  loadList();
   let timeEl = e.target.parentNode.querySelector(".timer");
   let liId = e.target.parentNode.id;
   let changeObjIdx = todos.findIndex((todo) => todo.id == liId);
@@ -51,18 +62,18 @@ const recordTime = function (e) {
       timeEl.innerText = strTime;
       todayTime.textContent =
         todos && dones ? milSecToStrTime(totalMil) : "00:00:00";
-      localStorage.setItem(TODO_LIST, JSON.stringify(todos));
+      saveList(TODO_LIST);
     }, 1000);
   } else {
     todos[changeObjIdx].ongoing = false;
+    window.location.reload();
     e.target.innerText = "▶";
     clearInterval(stopWatch);
-    localStorage.setItem(TODO_LIST, JSON.stringify(todos));
+    saveList(TODO_LIST);
   }
-  // localStorage.setItem(TODO_LIST, JSON.stringify(todos));
 };
 
-const createTodo = function () {
+const createTodo = () => {
   const id = String(Date.now());
   const text = todoInput.value;
   const newTodo = {
@@ -72,12 +83,12 @@ const createTodo = function () {
     ongoingTime: 0,
   };
   todos.push(newTodo);
-  localStorage.setItem(TODO_LIST, JSON.stringify(todos));
+  saveList(TODO_LIST);
   todoForm.reset();
   return newTodo;
 };
 
-const deleteTodo = function (e) {
+const deleteTodo = (e) => {
   const li = e.target.parentNode;
   const id = e.target.parentNode.id;
   const liClassList = e.target.parentNode.classList;
@@ -92,9 +103,8 @@ const deleteTodo = function (e) {
   localStorage.setItem(type, JSON.stringify(newList));
 };
 
-const loadTodo = function () {
-  todos = JSON.parse(localStorage.getItem(TODO_LIST)) || [];
-  dones = JSON.parse(localStorage.getItem(DONE_LIST)) || [];
+const updateTimer = () => {
+  loadList();
   let totalMil = 0;
   todos.forEach((todo) => {
     totalMil += todo.ongoingTime;
@@ -108,7 +118,7 @@ const loadTodo = function () {
     todos && dones ? milSecToStrTime(totalMil) : "00:00:00";
 };
 
-const addTodoUI = function (todoObj) {
+const addTodoUI = (todoObj) => {
   const newLi = document.createElement("li"),
     playBtn = document.createElement("button"),
     actionText = document.createElement("div"),
@@ -139,7 +149,7 @@ const addTodoUI = function (todoObj) {
   todo.appendChild(newLi);
 };
 
-const addDoneUI = function (todoObj) {
+const addDoneUI = (todoObj) => {
   const newLi = document.createElement("li"),
     goodBtn = document.createElement("button"),
     actionText = document.createElement("div"),
@@ -170,15 +180,14 @@ const addDoneUI = function (todoObj) {
   done.appendChild(newLi);
 };
 
-const handleSubmit = function (e) {
+const handleSubmit = (e) => {
   e.preventDefault();
   let newTodoObj = createTodo();
   addTodoUI(newTodoObj);
 };
 
-const handleMove = function (e) {
-  todos = JSON.parse(localStorage.getItem(TODO_LIST)) || [];
-  dones = JSON.parse(localStorage.getItem(DONE_LIST)) || [];
+const handleMove = (e) => {
+  loadList();
 
   const li = e.target.parentNode;
   const liId = e.target.parentNode.id;
@@ -186,8 +195,6 @@ const handleMove = function (e) {
 
   if (liClassList.contains("todo-list")) {
     todo.removeChild(li);
-
-    // done.appendChild(li);
     let same = todos.filter((todo) => todo.id != liId);
     let changeObj = todos.filter((todo) => todo.id == liId);
     todos = same;
@@ -195,25 +202,24 @@ const handleMove = function (e) {
     dones.push(...changeObj);
   } else {
     done.removeChild(li);
-
     let same = dones.filter((done) => done.id != liId);
     let changeObj = dones.filter((done) => done.id == liId);
     dones = same;
     addTodoUI(...changeObj);
     todos.push(...changeObj);
   }
-  localStorage.setItem(TODO_LIST, JSON.stringify(todos));
-  localStorage.setItem(DONE_LIST, JSON.stringify(dones));
+  saveList(TODO_LIST);
+  saveList(DONE_LIST);
 };
 
-const drawingChart = function () {
-  todos = JSON.parse(localStorage.getItem(TODO_LIST)) || [];
-  dones = JSON.parse(localStorage.getItem(DONE_LIST)) || [];
+const drawingChart = () => {
+  loadList();
 
   todos.forEach((todo) => {
     todo.x = todo.text;
     todo.value = todo.ongoingTime / 1000;
   });
+
   dones.forEach((done) => {
     done.x = done.text;
     done.value = done.ongoingTime / 1000;
@@ -228,15 +234,18 @@ const drawingChart = function () {
     chart.draw();
     chart.background().fill("rgba(255, 255, 255, 0.025");
   });
-  localStorage.setItem(TODO_LIST, JSON.stringify(todos));
-  localStorage.setItem(DONE_LIST, JSON.stringify(dones));
+  saveList(TODO_LIST);
+  saveList(DONE_LIST);
 };
 
-loadTodo();
-drawingChart();
-todoForm.addEventListener("submit", handleSubmit);
+const initTodo = () => {
+  updateTimer();
+  drawingChart();
+  todoForm.addEventListener("submit", handleSubmit);
+  // playBtnAll.forEach((play) => {
+  //   play.addEventListener("click", drawingChart);
+  //   console.log("1");
+  // });
+};
 
-playBtnAll.forEach((play) => {
-  play.addEventListener("click", drawingChart);
-});
-// setInterval(accTime, 1000);
+initTodo();

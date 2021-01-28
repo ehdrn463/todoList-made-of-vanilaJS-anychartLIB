@@ -23,8 +23,15 @@ const paintImage = () => {
   return true;
 };
 
+// 1시간마다 반복
+// 한시간
+// const updateInterval = 1000 * 60 * 60;
+
+// const updateBackground = () => {
+//   setTimeout(paintImage, updateInterval);
+// };
+
 const bgInit = () => {
-  // 1시간마다 반복
   paintImage();
 };
 

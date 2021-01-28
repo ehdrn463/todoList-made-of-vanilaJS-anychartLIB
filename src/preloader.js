@@ -13,7 +13,7 @@ const preloaderInit = () => {
         preloader.classList.add("loaded");
         clearInterval(timerId);
       }
-    }, 300);
+    }, 100);
   });
 };
 
