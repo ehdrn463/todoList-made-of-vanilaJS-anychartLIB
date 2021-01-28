@@ -1,21 +1,19 @@
-const userName = document.querySelector(".user-name");
-const userNameForm = document.querySelector(".user-name-form");
-const userNameInput = document.querySelector(".user-name-input");
+const userName = document.querySelector(".user-name"),
+  userNameForm = document.querySelector(".user-name-form"),
+  userNameInput = document.querySelector(".user-name-input");
 
-const USER_NAME = "currentUser";
-const DISPLAY_UN = "hiding";
+const USER_NAME = "currentUser",
+  DISPLAY_UN = "hiding";
 
-const inputName = function (e) {
-  e.preventDefault();
-  const currUserName = userNameInput.value;
-  localStorage.setItem(USER_NAME, currUserName);
-  userNameInput.value = "";
-  loadName();
+const saveName = (name) => {
+  localStorage.setItem(USER_NAME, name);
 };
 
-const checkCurrUser = function () {
-  let check = localStorage.getItem(USER_NAME);
-  return check ? true : false;
+const handleSubmitName = function (e) {
+  e.preventDefault();
+  saveName(userNameInput.value);
+  userNameInput.value = "";
+  loadName();
 };
 
 const loadName = function () {
@@ -29,5 +27,9 @@ const loadName = function () {
   }
 };
 
-loadName();
-userNameForm.addEventListener("submit", inputName);
+const initGreeting = () => {
+  loadName();
+  userNameForm.addEventListener("submit", handleSubmitName);
+};
+
+initGreeting();
