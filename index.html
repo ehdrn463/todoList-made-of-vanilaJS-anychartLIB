@@ -30,33 +30,36 @@
     <div class="container">
       <div class="sidebar">
         <div class="curr-time">00:00:00</div>
+        <div class="chart-title">오늘 기록</div>
         <div id="todayRecord"></div>
       </div>
       <div class="content">
         <div class="today-time">00:00:00</div>
-        <ul class="todo">
-          <h2>오늘 할 일</h2>
-          <form>
-            <input type="text" placeholder="Add a task" maxlength="15" />
-          </form>
-          <li class="todo-list">
-            <button class="play"></button>
-            <div class="action"></div>
-            <div class="timer"></div>
-            <button class="del-btn"></button>
-            <button class="move-btn"></button>
-          </li>
-        </ul>
-        <ul class="done">
-          <h2>오늘 한 일</h2>
-          <li class="done-list">
-            <button class="good"></button>
-            <div class="action"></div>
-            <div class="timer"></div>
-            <button class="del-btn"></button>
-            <button class="move-btn"></button>
-          </li>
-        </ul>
+        <div class="action-list">
+          <ul class="todo">
+            <h2>오늘 할 일</h2>
+            <form>
+              <input type="text" placeholder="Add a task" maxlength="15" />
+            </form>
+            <li class="todo-list">
+              <button class="play"></button>
+              <div class="action"></div>
+              <div class="timer"></div>
+              <button class="del-btn"></button>
+              <button class="move-btn"></button>
+            </li>
+          </ul>
+          <ul class="done">
+            <h2>오늘 한 일</h2>
+            <li class="done-list">
+              <button class="good"></button>
+              <div class="action"></div>
+              <div class="timer"></div>
+              <button class="del-btn"></button>
+              <button class="move-btn"></button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <script src="./src/greet.js"></script>

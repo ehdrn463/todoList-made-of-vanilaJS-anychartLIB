@@ -51,8 +51,8 @@ const loadCoords = function () {
   }
 };
 
-const init = function () {
+const initWeather = () => {
   loadCoords();
 };
 
-init();
+initWeather();

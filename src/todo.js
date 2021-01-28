@@ -222,7 +222,7 @@ const drawingChart = function () {
   anychart.onDocumentReady(function () {
     let data2 = todos.concat(dones);
     let chart = anychart.pie();
-    chart.title("오늘의 기록");
+    // chart.title("오늘의 기록");
     chart.data(data2);
     chart.container("todayRecord");
     chart.draw();

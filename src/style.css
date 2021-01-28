@@ -1,3 +1,6 @@
+/*----------------------------------------------------- 
+      Update 이후
+------------------------------------------------------*/
 html,
 body {
   width: 100%;
@@ -6,13 +9,20 @@ body {
 
 body {
   font-family: -apple-system, Arial, Helvetica, sans-serif;
-  color: white;
+}
+
+h2 {
+  font-size: 1.5vw;
+}
+button {
+  font-size: 1.5vw;
+  width: 3vw;
+  cursor: pointer;
 }
 
 #todayRecord {
-  width: 100%;
   height: 100%;
-  margin: 0;
+  margin-right: 10%;
   padding: 0;
 }
 
@@ -35,35 +45,103 @@ body {
   z-index: -1;
 }
 
-.play {
-  font-size: 15px;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 50%;
 }
 
-.user-name-form input {
-  width: 15vw;
-  height: 4vw;
+.sidebar .curr-time {
+  margin-left: 40%;
+  background-color: rgba(255, 255, 255, 0.4);
+  font-size: 3vw;
+  text-align: center;
+  color: black;
+  margin-right: 10%;
+}
+
+.sidebar .chart-title {
   font-size: 2vw;
   text-align: center;
+  color: black;
+  margin-right: 10%;
+}
+
+.sidebar #todayRecord,
+.sidebar .chart-title {
+  margin-left: 40%;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.container {
+  margin-top: 50px;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 50%;
+  height: max-content;
+}
+
+.content .today-time {
+  background-color: rgba(255, 255, 255, 0.4);
+  margin-right: 35%;
+  font-size: 5vw;
+  text-align: center;
+  color: black;
+}
+
+.content .action-list {
+  background-color: rgba(255, 255, 255, 0.4);
+  margin-right: 35%;
+}
+
+.done .done-list,
+.todo .todo-list {
+  width: auto;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1.5vw;
+}
+
+.done .done-list .timer,
+.todo .todo-list .timer {
+  margin-right: 6%;
+}
+
+.user-name {
+  font-size: 4em;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+}
+
+/*----------------------------------------------------- 
+      Update 이전
+------------------------------------------------------*/
+
+.user-name-form input {
+  width: 23vw;
+  height: 4vw;
+  font-size: 3vw;
   color: white;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: transparent;
+  border: none;
 }
 
 .todo input {
-  width: 16.5vw;
+  width: 20vw;
   height: 2vw;
   font-size: 1.8vw;
   text-align: center;
   margin-bottom: 10px;
-}
-
-.del-btn {
-  margin-left: 10px;
-  font-size: 15px;
-}
-
-.move-btn {
-  margin-right: 10px;
-  font-size: 15px;
 }
 
 .bgImage {
@@ -75,29 +153,6 @@ body {
   z-index: -1;
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  margin-right: 50px;
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.4);
-  width: 24.5vw;
-  height: max-content;
-}
-
-.container {
-  margin-top: 50px;
-  height: 50%;
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-}
-
 header {
   display: flex;
   justify-content: center;
@@ -107,39 +162,11 @@ header {
   color: white;
 }
 
-.user-name {
-  font-size: 4em;
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  margin-right: 15px;
-}
-
 .information-GPS {
   display: flex;
   flex-flow: row;
   justify-content: flex-end;
   margin-right: 30%;
-}
-
-.curr-time {
-  font-size: 40px;
-  /* display: flex;
-  flex-flow: row;
-  justify-content: center; */
-  text-align: center;
-}
-
-.today-time {
-  font-size: 5em;
-  text-align: center;
-}
-
-.curr-time,
-.today-time {
-  display: flex;
-  flex-flow: row;
-  flex-direction: column;
 }
 
 .user-name-form {
@@ -152,12 +179,6 @@ header {
   display: none;
 }
 
-.done .done-list,
-.todo .todo-list {
-  font-size: 25px;
-  display: flex;
-}
-
 .information-GPS {
   margin-top: 50px;
   font-size: 25px;
@@ -165,7 +186,7 @@ header {
 
 .done .done-list .action,
 .todo .todo-list .action {
-  width: 10vw;
+  width: 12vw;
 }
 
 .todo-list:first-of-type,

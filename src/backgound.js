@@ -24,6 +24,7 @@ const paintImage = () => {
 };
 
 const bgInit = () => {
+  // 1시간마다 반복
   paintImage();
 };
 

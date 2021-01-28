@@ -10,5 +10,9 @@ const getCurrTime = function () {
   }:${sec >= 10 ? sec : "0" + sec}`;
 };
 
-getCurrTime();
-setInterval(getCurrTime, 1000);
+const initClock = () => {
+  getCurrTime();
+  setInterval(getCurrTime, 1000);
+};
+
+initClock();
