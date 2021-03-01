@@ -4,6 +4,7 @@ const paintImage = () => {
   const img = new Image();
   let clock = new Date();
   let hour = clock.getHours();
+  img.className = "bg-light";
 
   if (hour >= 6 && hour < 11) {
     img.src = "./imgs/morning.jpg";

@@ -44,6 +44,10 @@ button {
   font-weight: 700;
 }
 
+.bg-light {
+  filter: brightness(50%);
+}
+
 .day:first-child,
 .sun {
   color: red;
@@ -54,8 +58,7 @@ button {
 }
 
 .selected {
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-weight: bold;
   background-color: black;
   color: white;
 }
@@ -79,7 +82,7 @@ button {
   z-index: -1;
 }
 
-.sidebar .chart-title {
+.chart-title {
   font-size: 2vw;
   text-align: center;
   color: black;
@@ -88,9 +91,7 @@ button {
 .today-time {
   display: flex;
   justify-content: center;
-  /* flex-direction: column; */
-  /* align-items: center; */
-  margin-top: 15px;
+
   font-size: 3rem;
 }
 
@@ -141,17 +142,28 @@ button {
   border: 0.5px solid black;
 }
 
+.cal-header {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.day {
+  text-align: center;
+  font-size: 1.4rem;
+}
+
 .date,
-.day,
 .cal-header {
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.8rem;
 }
 
 .pre-btn,
 .next-btn {
   font-size: 1.3rem;
   margin: 0 15px;
+  width: 20%;
 }
 
 .sidebar {
@@ -164,7 +176,6 @@ button {
 .content {
   display: flex;
   flex-direction: column;
-  align-items: start;
   grid-column: 4/5;
 }
 
@@ -176,6 +187,7 @@ button {
   font-size: 1.1rem;
   justify-content: space-between;
   align-items: center;
+  font-weight: bold;
 }
 
 .user-name {
@@ -202,7 +214,7 @@ button {
 }
 
 .todo input {
-  width: 20vw;
+  width: 25vw;
   height: 2vw;
   font-size: 1.8vw;
   text-align: center;

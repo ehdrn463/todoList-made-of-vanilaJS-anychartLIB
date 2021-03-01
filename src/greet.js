@@ -18,7 +18,6 @@ const handleSubmitName = function (e) {
 
 const loadName = function () {
   const currUserName = localStorage.getItem(USER_NAME);
-
   if (currUserName) {
     userNameForm.classList.add(DISPLAY_UN);
     userName.innerHTML = currUserName + "의 오늘의 공부";
