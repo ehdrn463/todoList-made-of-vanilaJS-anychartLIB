@@ -6,74 +6,30 @@ const todo = document.querySelector(".todo"),
   doneList = done.querySelector("done-list"),
   playBtn = document.querySelector("content .play"),
   playBtnAll = document.querySelectorAll("button.play"),
-  todayTime = document.querySelector(".today-time");
+  todayTime = document.querySelector(".today-time"),
+  chartEl = document.querySelector("#todayRecord");
 
 const TODO_LIST = "todo",
   DONE_LIST = "done";
 
-let todos = [];
-let dones = [];
+let selTodos = {};
+let selDones = {};
+// 날짜: todos, dones
+// 'dailyTodo'={'20210228': [{id:xxx, text: yyy, ongoing:false, ongoingTime: 1000, done: false}, {todo2}, {todo3}], '20210301':[{todo1}, {todo2}] }
+// 'delayedTodo'={'20210228': [{id:xxx, text: yyy, ongoing:false, ongoingTime: 1000, done: false}, {todo2}, {todo3}], '20210301':[{todo1}, {todo2}] }
 
-const milSecToStrTime = (milSec) => {
-  let hour = Math.floor((milSec / (1000 * 60 * 6)) % 24);
-  let min = Math.floor((milSec / (1000 * 60)) % 60);
-  let sec = Math.floor((milSec / 1000) % 60);
+let selectedEl = document.querySelector(".selected");
+let selDate = document.querySelector(".selected").classList[1];
 
-  let strTime = `${hour < 10 ? "0" + hour : hour}:${
-    min < 10 ? "0" + min : min
-  }:${sec < 10 ? "0" + sec : sec}`;
-  return strTime;
-};
-
-const loadList = () => {
-  todos = JSON.parse(localStorage.getItem(TODO_LIST)) || [];
-  dones = JSON.parse(localStorage.getItem(DONE_LIST)) || [];
-};
-
-const saveList = (listName) => {
-  listName === TODO_LIST
-    ? localStorage.setItem(TODO_LIST, JSON.stringify(todos))
-    : localStorage.setItem(DONE_LIST, JSON.stringify(dones));
-};
-
-const recordTime = (e) => {
-  localStorage.setItem(TODO_LIST, JSON.stringify(todos));
-  loadList();
-  let timeEl = e.target.parentNode.querySelector(".timer");
-  let liId = e.target.parentNode.id;
-  let changeObjIdx = todos.findIndex((todo) => todo.id == liId);
-
-  let totalMil = 0;
-  dones.forEach((done) => {
-    totalMil += done.ongoingTime;
-  });
-  todos.forEach((todo) => {
-    totalMil += todo.ongoingTime;
-  });
-
-  // 재생눌렀을때 타이머가 업데이트되어야 함
-  if (!todos[changeObjIdx].ongoing) {
-    todos[changeObjIdx].ongoing = true;
-    e.target.innerHTML = "⏸";
-    stopWatch = setInterval(function () {
-      todos[changeObjIdx].ongoingTime += 1000;
-      totalMil += 1000;
-      let strTime = milSecToStrTime(todos[changeObjIdx].ongoingTime);
-      timeEl.innerText = strTime;
-      todayTime.textContent =
-        todos && dones ? milSecToStrTime(totalMil) : "00:00:00";
-      saveList(TODO_LIST);
-    }, 1000);
-  } else {
-    todos[changeObjIdx].ongoing = false;
-    window.location.reload();
-    e.target.innerText = "▶";
-    clearInterval(stopWatch);
-    saveList(TODO_LIST);
+const createSelObj = () => {
+  let selDate = document.querySelector(".selected").classList[1];
+  // 아무 것도 없으면 [] 빈거 만들어주기
+  if (!selTodos[selDate]) {
+    selTodos[selDate] = [];
   }
-};
-
-const createTodo = () => {
+  if (!selDones[selDate]) {
+    selDones[selDate] = [];
+  }
   const id = String(Date.now());
   const text = todoInput.value;
   const newTodo = {
@@ -82,40 +38,101 @@ const createTodo = () => {
     ongoing: false,
     ongoingTime: 0,
   };
-  todos.push(newTodo);
-  saveList(TODO_LIST);
+  selTodos[selDate].push(newTodo);
   todoForm.reset();
+  saveList(TODO_LIST);
+  saveList(DONE_LIST);
   return newTodo;
 };
 
+const loadList = () => {
+  selTodos = JSON.parse(localStorage.getItem(TODO_LIST)) || [];
+  selDones = JSON.parse(localStorage.getItem(DONE_LIST)) || [];
+};
+
+const saveList = (listName) => {
+  listName === TODO_LIST
+    ? localStorage.setItem(TODO_LIST, JSON.stringify(selTodos))
+    : localStorage.setItem(DONE_LIST, JSON.stringify(selDones));
+};
+
+const recordTime = (e) => {
+  localStorage.setItem(TODO_LIST, JSON.stringify(selTodos));
+  let selDate = document.querySelector(".selected").classList[1];
+  loadList();
+  let timeEl = e.target.parentNode.querySelector(".timer");
+  let liId = e.target.parentNode.id;
+  let changeObjIdx = selTodos[selDate].findIndex((todo) => todo.id == liId);
+
+  let totalMil = 0;
+  selDones[selDate].forEach((done) => {
+    totalMil += done.ongoingTime;
+  });
+  selTodos[selDate].forEach((todo) => {
+    totalMil += todo.ongoingTime;
+  });
+
+  // 재생눌렀을때 타이머가 업데이트되어야 함
+  if (!selTodos[selDate][changeObjIdx].ongoing) {
+    selTodos[selDate][changeObjIdx].ongoing = true;
+    e.target.innerHTML = "⏸";
+    stopWatch = setInterval(function () {
+      selTodos[selDate][changeObjIdx].ongoingTime += 1000;
+      totalMil += 1000;
+      let strTime = milSecToStrTime(
+        selTodos[selDate][changeObjIdx].ongoingTime
+      );
+      timeEl.innerText = strTime;
+      todayTime.textContent =
+        selTodos[selDate] && selDones[selDate]
+          ? milSecToStrTime(totalMil)
+          : "00:00:00";
+      saveList(TODO_LIST);
+    }, 1000);
+  } else {
+    selTodos[selDate][changeObjIdx].ongoing = false;
+    drawingChart();
+    e.target.innerText = "▶";
+    clearInterval(stopWatch);
+    saveList(TODO_LIST);
+  }
+};
+
 const deleteTodo = (e) => {
+  let selDate = document.querySelector(".selected").classList[1];
   const li = e.target.parentNode;
   const id = e.target.parentNode.id;
   const liClassList = e.target.parentNode.classList;
   let type = liClassList.contains("todo-list") ? TODO_LIST : DONE_LIST;
   const ul = document.querySelector(`.${type}`);
   ul.removeChild(li);
-
-  let selectedList = JSON.parse(localStorage.getItem(type));
-  const newList = selectedList.filter((list) => {
+  let selectedList = JSON.parse(localStorage.getItem(type))[selDate];
+  let newList = selectedList.filter((list) => {
     return list.id != id;
   });
-  localStorage.setItem(type, JSON.stringify(newList));
+  let newObj = {};
+  newObj[selDate] = newList;
+  localStorage.setItem(type, JSON.stringify(newObj));
 };
 
 const updateTimer = () => {
   loadList();
+  let selDate = document.querySelector(".selected").classList[1];
   let totalMil = 0;
-  todos.forEach((todo) => {
-    totalMil += todo.ongoingTime;
-    addTodoUI(todo);
-  });
-  dones.forEach((done) => {
-    totalMil += done.ongoingTime;
-    addDoneUI(done);
-  });
+  selTodos[selDate] &&
+    selTodos[selDate].forEach((todo) => {
+      totalMil += todo.ongoingTime;
+      // addTodoUI(todo); // 왜 넣었는지 기억안남... 있으면 중복돼서 주석처리함
+    });
+  selTodos[selDate] &&
+    selDones[selDate].forEach((done) => {
+      totalMil += done.ongoingTime;
+      // addDoneUI(done);
+    });
   todayTime.textContent =
-    todos && dones ? milSecToStrTime(totalMil) : "00:00:00";
+    selTodos[selDate] && selDones[selDate]
+      ? milSecToStrTime(totalMil)
+      : "00:00:00";
 };
 
 const addTodoUI = (todoObj) => {
@@ -180,33 +197,68 @@ const addDoneUI = (todoObj) => {
   done.appendChild(newLi);
 };
 
+const fetchLiDom = (strDate) => {
+  selTodos[strDate] &&
+    selTodos[strDate].forEach((e) => {
+      addTodoUI(e);
+    });
+  selDones[strDate] &&
+    selDones[strDate].forEach((e) => {
+      addDoneUI(e);
+    });
+};
+
+const clearLiDom = () => {
+  let todoList = document.querySelectorAll(".todo-list"),
+    doneList = document.querySelectorAll(".done-list");
+
+  todoList &&
+    todoList.forEach((e) => {
+      e.parentNode.removeChild(e);
+    });
+  doneList &&
+    doneList.forEach((e) => {
+      e.parentNode.removeChild(e);
+    });
+};
+
+const milSecToStrTime = (milSec) => {
+  let hour = Math.floor((milSec / (1000 * 60 * 6)) % 24);
+  let min = Math.floor((milSec / (1000 * 60)) % 60);
+  let sec = Math.floor((milSec / 1000) % 60);
+  let strTime = `${hour < 10 ? "0" + hour : hour}:${
+    min < 10 ? "0" + min : min
+  }:${sec < 10 ? "0" + sec : sec}`;
+  return strTime;
+};
+
 const handleSubmit = (e) => {
   e.preventDefault();
-  let newTodoObj = createTodo();
+  let newTodoObj = createSelObj();
   addTodoUI(newTodoObj);
 };
 
 const handleMove = (e) => {
   loadList();
-
+  let selDate = document.querySelector(".selected").classList[1];
   const li = e.target.parentNode;
   const liId = e.target.parentNode.id;
   const liClassList = e.target.parentNode.classList;
 
   if (liClassList.contains("todo-list")) {
     todo.removeChild(li);
-    let same = todos.filter((todo) => todo.id != liId);
-    let changeObj = todos.filter((todo) => todo.id == liId);
-    todos = same;
+    let same = selTodos[selDate].filter((todo) => todo.id != liId);
+    let changeObj = selTodos[selDate].filter((todo) => todo.id == liId);
+    selTodos[selDate] = same;
     addDoneUI(...changeObj);
-    dones.push(...changeObj);
+    selDones[selDate].push(...changeObj);
   } else {
     done.removeChild(li);
-    let same = dones.filter((done) => done.id != liId);
-    let changeObj = dones.filter((done) => done.id == liId);
-    dones = same;
+    let same = selDones[selDate].filter((done) => done.id != liId);
+    let changeObj = selDones[selDate].filter((done) => done.id == liId);
+    selDones[selDate] = same;
     addTodoUI(...changeObj);
-    todos.push(...changeObj);
+    selTodos[selDate].push(...changeObj);
   }
   saveList(TODO_LIST);
   saveList(DONE_LIST);
@@ -214,19 +266,29 @@ const handleMove = (e) => {
 
 const drawingChart = () => {
   loadList();
+  if (chartEl.hasChildNodes()) chartEl.removeChild(chartEl.firstChild);
 
-  todos.forEach((todo) => {
-    todo.x = todo.text;
-    todo.value = todo.ongoingTime / 1000;
-  });
+  let selDate = document.querySelector(".selected").classList[1];
+  // 둘다 비었으면 종료
+  if (!(selTodos[selDate] || selDones[selDate])) return;
+  // 비었으면 빈배열 만들어줌.
+  if (!selTodos[selDate]) selTodos[selDate] = [];
+  if (!selDones[selDate]) selDones[selDate] = [];
 
-  dones.forEach((done) => {
-    done.x = done.text;
-    done.value = done.ongoingTime / 1000;
-  });
+  selTodos[selDate] &&
+    selTodos[selDate].forEach((todo) => {
+      todo.x = todo.text;
+      todo.value = todo.ongoingTime / 1000;
+    });
+
+  selTodos[selDate] &&
+    selDones[selDate].forEach((done) => {
+      done.x = done.text;
+      done.value = done.ongoingTime / 1000;
+    });
 
   anychart.onDocumentReady(function () {
-    let data2 = todos.concat(dones);
+    let data2 = selTodos[selDate].concat(selDones[selDate]);
     let chart = anychart.pie();
     // chart.title("오늘의 기록");
     chart.data(data2);
@@ -237,6 +299,8 @@ const drawingChart = () => {
   saveList(TODO_LIST);
   saveList(DONE_LIST);
 };
+
+const updateChart = () => {};
 
 const initTodo = () => {
   updateTimer();

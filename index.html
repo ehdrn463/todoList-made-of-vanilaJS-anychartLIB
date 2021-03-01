@@ -11,9 +11,11 @@
   <body>
     <header>
       <div class="preloader"><img src="imgs/spinner.svg" alt="spinner" /></div>
-      <div class="information-GPS">
-        <span class="place"></span><span class="weather"></span>
+      <div class="user-info">
+        <div class="place"></div>
+        <div class="weather"></div>
       </div>
+      <div class="curr-time">00:00:00</div>
       <div class="user-name">
         <form class="user-name-form">
           <input
@@ -28,41 +30,55 @@
     </header>
 
     <div class="container">
+      <div class="calendar">
+        <div class="cal-header">
+          <input class="pre-btn" type="button" value="prev" />
+          <div class="year-month">
+            <span class="year"></span>
+            -
+            <span class="month"></span>
+          </div>
+          <input class="next-btn" type="button" value="next" />
+        </div>
+        <div class="cal-day">
+          <div class="day">Sun</div>
+          <div class="day">Mon</div>
+          <div class="day">Tue</div>
+          <div class="day">Wed</div>
+          <div class="day">Thu</div>
+          <div class="day">Fri</div>
+          <div class="day">Sat</div>
+        </div>
+        <div class="cal-date"></div>
+        <!-- 
+        <이전달>  2021-2  <다음달>
+        일 월 화 수 목 금 토
+        칼럼: 7
+        로우: 5
+        -->
+      </div>
       <div class="sidebar">
-        <div class="curr-time">00:00:00</div>
         <div class="chart-title">오늘 기록</div>
         <div id="todayRecord"></div>
       </div>
       <div class="content">
         <div class="today-time">00:00:00</div>
+
         <div class="action-list">
           <ul class="todo">
             <h2>오늘 할 일</h2>
             <form>
               <input type="text" placeholder="Add a task" maxlength="15" />
             </form>
-            <li class="todo-list">
-              <button class="play"></button>
-              <div class="action"></div>
-              <div class="timer"></div>
-              <button class="del-btn"></button>
-              <button class="move-btn"></button>
-            </li>
           </ul>
           <ul class="done">
             <h2>오늘 한 일</h2>
-            <li class="done-list">
-              <button class="good"></button>
-              <div class="action"></div>
-              <div class="timer"></div>
-              <button class="del-btn"></button>
-              <button class="move-btn"></button>
-            </li>
           </ul>
         </div>
       </div>
     </div>
     <script src="./src/greet.js"></script>
+    <script src="./src/calendar.js"></script>
     <script src="./src/todo.js"></script>
     <script src="./src/clock.js"></script>
     <script src="./src/weather.js"></script>
