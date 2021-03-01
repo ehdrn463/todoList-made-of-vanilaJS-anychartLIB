@@ -1,5 +1,7 @@
 # Record today's study
 
+- [DEMO_PAGE](https://ehdrn463.github.io/todoList-made-of-vanilaJS-anychartLIB/, "Go demo-page")
+
 ## Features
 
 - Record today's study time using a calendar
@@ -17,3 +19,4 @@
 - 2nd
   - Record today's study time using a calendar
   - Check some days's study time
+  - ![second_version](./demo_imgs/2nd_ver.png)
