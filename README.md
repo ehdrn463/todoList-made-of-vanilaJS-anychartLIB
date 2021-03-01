@@ -13,7 +13,7 @@
   - Record Only today's study time
   - Save names and tasks
   - Show temperature and weather using an weather API
-  - !['first_version']('./demo_imgs/1st_ver' alt)
+  - ![first_version](./demo_imgs/1st_ver.png)
 - 2nd
   - Record today's study time using a calendar
   - Check some days's study time
