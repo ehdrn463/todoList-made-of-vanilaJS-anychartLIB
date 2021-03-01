@@ -1,6 +1,6 @@
 # Record today's study
 
-- [DEMO_PAGE](https://ehdrn463.github.io/todoList-made-of-vanilaJS-anychartLIB/, "Go demo-page")
+- [DEMO_PAGE](https://ehdrn463.github.io/todoList-made-of-vanilaJS-anychartLIB/ "Go demo-page")
 
 ## Features
 
