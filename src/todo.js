@@ -232,6 +232,11 @@ const milSecToStrTime = (milSec) => {
   return strTime;
 };
 
+const hideChart = () => {
+  const chartEl = document.querySelector(".pie-chart");
+  chartEl.style.display = "none";
+};
+
 const handleSubmit = (e) => {
   e.preventDefault();
   let newTodoObj = createSelObj();
@@ -267,14 +272,15 @@ const handleMove = (e) => {
 const drawingChart = () => {
   loadList();
   if (chartEl.hasChildNodes()) chartEl.removeChild(chartEl.firstChild);
-
   let selDate = document.querySelector(".selected").classList[1];
+
   // 둘다 비었으면 종료
-  if (!(selTodos[selDate] || selDones[selDate])) return;
-  // 비었으면 빈배열 만들어줌.
+  // if (!(selTodos[selDate].length || selDones[selDate].length)) {
+  //   console.log("둘다없어");
+  //   hideChart();
+  // }
   if (!selTodos[selDate]) selTodos[selDate] = [];
   if (!selDones[selDate]) selDones[selDate] = [];
-
   selTodos[selDate] &&
     selTodos[selDate].forEach((todo) => {
       todo.x = todo.text;

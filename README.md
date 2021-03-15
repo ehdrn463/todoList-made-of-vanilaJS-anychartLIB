@@ -25,3 +25,8 @@
 - 3rd (Update scheduled)
   - Refactoring
   - Responsive
+
+## under construction
+
+- hide pie chart when data is none
+- responsive (media query)
